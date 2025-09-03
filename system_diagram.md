@@ -2,13 +2,13 @@
 
 ## 1. Main Controller Page
 - Options:
-  - **Go to Stickers Collector Main**
+  - **Go to Tickers Collector Main**
   - **Go to Query Menu**
 
 ---
 
-## 2. Stickers (Tickers) Collector Main
-- Input: **Enter Stickers** (user enters ticker symbols)
+## 2. Tickers Collector Main
+- Input: **Enter Tickers** (user enters ticker symbols)
 - Buttons: **Start / Stop Collector Agent**
 - Navigation:
   - **Back to Main Controller Page**
@@ -17,22 +17,22 @@
 ---
 
 ## 3. Query Menu
-- Input: **Enter Stickers** (ticker symbols to query)
+- Input: **Enter Tickers** (ticker symbols to query)
 - Output: **Display Current Table** (fetch from DB)
 - Navigation:
   - **Back to Main Controller Page**
-  - **Go to Stickers Collector Main**
+  - **Go to Tickers Collector Main**
 
 ---
 
 ## 4. Collector Agent
-- Triggered by: **Start button** from Stickers Collector Main
-- Reads: **Stickers Input** (selected tickers)
+- Triggered by: **Start button** from Tickers Collector Main
+- Reads: **Tickers Input** (selected tickers)
 - Behavior:
   - Loop: **Every 1 minute**
   - **Get ticker info** from **Yahoo Finance (yfinance)**
   - **Write ticker info** into **Local MySQL Database**
-- Stopped by: **Stop button** from Stickers Collector Main
+- Stopped by: **Stop button** from Tickers Collector Main
 
 ---
 
@@ -47,7 +47,7 @@
 
 ## Workflow
 1. User opens **Main Controller Page**.
-2. If selecting **Stickers Collector**:
+2. If selecting **Tickers Collector**:
    - Enter tickers
    - Press **Start** → Collector Agent runs (fetch every minute, save to DB)
    - Press **Stop** → Collector Agent stops

@@ -10,7 +10,32 @@ dependencies = [
   "pymysql",
   "python-dotenv",
   "pydantic-settings",
+  "yfinance",
+  "pandas",
+  "apscheduler",
+]
+
+[project.optional-dependencies]
+test = [
+  "pytest>=6.0",
+  "pytest-mock",
+  "pytest-asyncio",
+]
+dev = [
+  "pytest>=6.0",
+  "pytest-mock", 
+  "pytest-asyncio",
 ]
 
 [tool.alembic]
 script_location = "migrations"
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q --strict-markers"
+testpaths = ["tests"]
+markers = [
+    "integration: marks tests as integration tests (may require network)",
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "unit: marks tests as unit tests",
+]

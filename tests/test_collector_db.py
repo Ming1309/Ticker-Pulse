@@ -4,7 +4,10 @@ Test Yahoo Collector with Database
 
 import sys
 import os
-sys.path.append('/Users/ming/Documents/Code/Ticker-Pulse')
+
+# Add project root to Python path using relative path
+project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, project_root)
 
 import yfinance as yf
 import pandas as pd
@@ -35,7 +38,7 @@ class YahooCollectorTest:
             ticker = yf.Ticker(symbol)
             
             # Get latest 1-day data with 1-minute intervals
-            hist_data = ticker.history(period="1d", interval="5m")  # Use 5m for more reliable data
+            hist_data = ticker.history(period="1d", interval="1m")  
             
             if hist_data.empty:
                 logger.warning(f"No data available for ticker: {symbol}")
