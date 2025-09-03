@@ -1,8 +1,10 @@
 """
 FastAPI App with CollectorAgent Integration
+Enhanced with dedicated API routers for tickers and prices
 """
 
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from typing import List, Optional
 import sys
@@ -19,11 +21,42 @@ import logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# Import routers with try-catch to handle potential import issues
+try:
+    from app.api import tickers, prices
+    ROUTERS_AVAILABLE = True
+except ImportError as e:
+    logger.warning(f"Router import failed: {e}")
+    ROUTERS_AVAILABLE = False
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 app = FastAPI(
     title="MarketPulse API",
-    description="Stock ticker data collection and query system",
-    version="1.0.0"
+    description="Stock ticker data collection and query system with comprehensive REST endpoints",
+    version="1.0.0",
+    docs_url="/docs",
+    redoc_url="/redoc"
 )
+
+# Add CORS middleware for frontend integration
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Configure appropriately for production
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Include API routers
+if ROUTERS_AVAILABLE:
+    app.include_router(tickers.router)
+    app.include_router(prices.router)
+    logger.info("✅ API routers loaded successfully")
+else:
+    logger.warning("⚠️ API routers not available - running with basic endpoints only")
 
 # Pydantic models
 class TickerList(BaseModel):
@@ -40,16 +73,40 @@ collector_agent = get_collector_agent()
 
 @app.get("/")
 def root():
-    """Root endpoint"""
+    """Root endpoint with comprehensive API overview"""
     return {
         "message": "MarketPulse API",
         "version": "1.0.0",
+        "description": "Stock ticker data collection and query system",
+        "docs": "/docs",
+        "redoc": "/redoc",
         "endpoints": {
-            "health": "/health",
-            "collector_status": "/api/collector/status",
-            "start_collection": "/api/collector/start",
-            "stop_collection": "/api/collector/stop",
-            "force_collection": "/api/collector/force"
+            # Ticker Collection Endpoints
+            "ticker_collection": {
+                "status": "/api/tickers/status",
+                "start_collection": "/api/tickers/start-collection",
+                "stop_collection": "/api/tickers/stop-collection",
+                "update_tickers": "/api/tickers/update-tickers",
+                "force_collection": "/api/tickers/force-collection",
+                "health": "/api/tickers/health"
+            },
+            # Price Data Endpoints
+            "price_data": {
+                "latest_prices": "/api/prices/latest",
+                "price_history": "/api/prices/history/{symbol}",
+                "price_summary": "/api/prices/summary/{symbol}",
+                "available_tickers": "/api/prices/tickers",
+                "delete_data": "/api/prices/data/{symbol}",
+                "health": "/api/prices/health"
+            },
+            # Legacy endpoints (maintained for backward compatibility)
+            "legacy": {
+                "health": "/health",
+                "collector_status": "/api/collector/status",
+                "start_collection": "/api/collector/start",
+                "stop_collection": "/api/collector/stop",
+                "force_collection": "/api/collector/force"
+            }
         }
     }
 
