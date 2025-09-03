@@ -18,7 +18,10 @@ from collectors.collector_agent import get_collector_agent
 import logging
 
 # Configure logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
 logger = logging.getLogger(__name__)
 
 # Import routers with try-catch to handle potential import issues
@@ -28,10 +31,6 @@ try:
 except ImportError as e:
     logger.warning(f"Router import failed: {e}")
     ROUTERS_AVAILABLE = False
-
-# Configure logging
-logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger(__name__)
 
 app = FastAPI(
     title="MarketPulse API",

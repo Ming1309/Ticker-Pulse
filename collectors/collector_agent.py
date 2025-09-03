@@ -22,8 +22,7 @@ sys.path.insert(0, project_root)
 from collectors.yahoo_collector import YahooCollector
 from app.db.base import SessionLocal
 
-# Configure logging
-logging.basicConfig(level=logging.INFO)
+# Use logger from main app configuration
 logger = logging.getLogger(__name__)
 
 

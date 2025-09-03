@@ -11,8 +11,7 @@ import logging
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 
-# Configure logging
-logging.basicConfig(level=logging.INFO)
+# Use logger from main app configuration
 logger = logging.getLogger(__name__)
 
 
